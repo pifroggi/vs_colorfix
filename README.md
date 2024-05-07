@@ -13,10 +13,12 @@ Correct for color shift by matching the average color of the clip to that of a r
     clip = vs_colorfix.average(clip, reference_clip, blur_radius)
 
 __*clip*__  
-Clip where the color fix will be applied to. Must be higher than 8 bit to avoid banding.
+Clip where the color fix will be applied to.  
+Must have a bit depth higher than 8 to avoid banding.
 
 __*reference_clip*__  
-This is the clip where the colors are taken from. Must be higher than 8 bit to avoid banding.
+This is the clip where the colors are taken from.  
+Must have a bit depth higher than 8 to avoid banding.
 
 __*blur_radius*__  
 Blur will only be used internally and is not visible on the output. It helps to increase generalization of the averaging effect and can reduce artifacts in the output.  
@@ -30,10 +32,12 @@ Correct for color shift by first separating the frame into wavelets of different
     clip = vs_colorfix.wavelet(clip, reference_clip, wavelets)
 
 __*clip*__  
-Clip where the color fix will be applied to. Must be in RGBS or YUV444PS format.
+Clip where the color fix will be applied to.  
+Must be in RGBS or YUV444PS format.
 
 __*reference_clip*__  
-This is the clip where the colors are taken from. Must be in RGBS or YUV444PS format.
+This is the clip where the colors are taken from.  
+Must be in RGBS or YUV444PS format.
 
 __*wavelets*__  
 Number of wavelets, 5 seems to work best in most cases. It helps to increase generalization of the averaging effect and can reduce artifacts in the output.  
