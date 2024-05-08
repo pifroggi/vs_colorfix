@@ -26,7 +26,7 @@ Higher means a more global color match. Wider bloom/bleed and less local color p
 Lower means a more local color match. Smaller bloom/bleed and more artifacts. Too low and the reference clip will become visible.
 
 ## Wavelet Color Fix
-Correct for color shift by first separating the frame into wavelets of different frequencies, then matching the average color of a clip to that of a reference clip. This works similarly to the Average Color Fix, but produces better results at the cost of more computation. Both clips must have spatially close to the same content. The Wavelet Color Fix functions are from [sd-webui-stablesr](https://github.com/pkuliyi2015/sd-webui-stablesr/blob/master/srmodule/colorfix.py).  
+Correct for color shift by first separating a clip into wavelets of different frequencies, then matching the average color of that clip to that of a reference clip. This works similarly to the Average Color Fix, but produces better results at the cost of more computation. Both clips must have spatially close to the same content. The Wavelet Color Fix functions are from [sd-webui-stablesr](https://github.com/pkuliyi2015/sd-webui-stablesr/blob/master/srmodule/colorfix.py).  
 
     import vs_colorfix
     clip = vs_colorfix.wavelet(clip, reference_clip, wavelets=5)
