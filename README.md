@@ -1,6 +1,6 @@
-# Color Fix (Color Transfer) functions for Vapoursynth
+# Color Fix functions for Vapoursynth
 
-Example transfering DVD colors to upscaled image: https://imgsli.com/MjM5NzM5/0/2
+Also knows as Color Transfer sometimes. Example transfering DVD colors to upscaled image: https://imgsli.com/MjM5NzM5/0/2
 
 ### Requirements
 * pip install numpy
@@ -44,5 +44,5 @@ Number of wavelets, 5 seems to work best in most cases.
 Higher means a more global color match. Wider bloom/bleed and less local color precision.  
 Lower means a more local color match. Smaller bloom/bleed and more artifacts. Too low and the reference clip will become visible.
 
-
-
+## Tips
+If your clips are not perfectly aligned, try this: https://github.com/pifroggi/vs_videoalignment
