@@ -21,9 +21,9 @@ This is the clip where the colors are taken from.
 Must have a bit depth higher than 8 to avoid banding.
 
 __*blur_radius*__  
-Blur will only be used internally and is not visible on the output. It helps to increase generalization of the averaging effect and can reduce artifacts in the output.  
+Blur will only be used internally and is not visible on the output.  
 Higher means a more global color match. Wider bloom/bleed and less local color precision.  
-Lower means a more local color match. Smaller bloom/bleed and more artifacts. Too low and the reference image will become visible.
+Lower means a more local color match. Smaller bloom/bleed and more artifacts. Too low and the reference clip will become visible.
 
 ## Wavelet Color Fix
 Correct for color shift by first separating the frame into wavelets of different frequencies, then matching the average color of the clip to that of a reference clip. This works similarly to the Average Color Fix, but produces better results at the cost of more computation. Both clips must have spatially close to the same content. The Wavelet Color Fix functions are from [sd-webui-stablesr](https://github.com/pkuliyi2015/sd-webui-stablesr/blob/master/srmodule/colorfix.py).  
@@ -40,9 +40,9 @@ This is the clip where the colors are taken from.
 Must be in RGBS or YUV444PS format.
 
 __*wavelets*__  
-Number of wavelets, 5 seems to work best in most cases. It helps to increase generalization of the averaging effect and can reduce artifacts in the output.  
+Number of wavelets, 5 seems to work best in most cases.  
 Higher means a more global color match. Wider bloom/bleed and less local color precision.  
-Lower means a more local color match. Smaller bloom/bleed and more artifacts. Too low and the reference image will become visible.
+Lower means a more local color match. Smaller bloom/bleed and more artifacts. Too low and the reference clip will become visible.
 
 
 
