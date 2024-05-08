@@ -17,7 +17,7 @@ Clip where the color fix will be applied to.
 Must have a bit depth higher than 8 to avoid banding.
 
 __*reference_clip*__  
-This is the clip where the colors are taken from.  
+Clip where the colors are taken from.  
 Must have a bit depth higher than 8 to avoid banding.
 
 __*blur_radius*__  
@@ -36,7 +36,7 @@ Clip where the color fix will be applied to.
 Must be in RGBS or YUV444PS format.
 
 __*reference_clip*__  
-This is the clip where the colors are taken from.  
+Clip where the colors are taken from.  
 Must be in RGBS or YUV444PS format.
 
 __*wavelets*__  
