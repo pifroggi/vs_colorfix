@@ -45,4 +45,4 @@ Higher means a more global color match. Wider bloom/bleed and less local color p
 Lower means a more local color match. Smaller bloom/bleed and more artifacts. Too low and the reference clip will become visible.
 
 ## Tips
-If your clips are not perfectly aligned, try this: https://github.com/pifroggi/vs_videoalignment
+If your clips are not perfectly aligned, try this: https://github.com/pifroggi/vs_align
