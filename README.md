@@ -1,6 +1,6 @@
 # Color Fix functions for Vapoursynth
 
-For example for tranfering colors from one source to another, or fixing color shift from AI upscaling/restoration models. Also knows as Color Transfer sometimes. Example transfering DVD colors to upscaled image: https://imgsli.com/MjM5NzM5/0/2
+For example for transfering colors from one source to another, or fixing color shift from AI upscaling/restoration models. Also knows as Color Transfer sometimes. Example transfering DVD colors to upscaled image: https://imgsli.com/MjM5NzM5/0/2
 
 ### Requirements
 * pip install numpy
