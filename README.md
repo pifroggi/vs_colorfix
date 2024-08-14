@@ -1,25 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Color Fix functions for Vapoursynth
 
 For example for transfering colors from one source to another, or fixing color shift from AI upscaling/restoration models. Also knows as Color Transfer or Color Matching sometimes. Example fixing colors after upscaling a DVD: https://imgsli.com/MjM5NzM5/0/2
@@ -53,7 +31,7 @@ If not used, all planes will be color fixed.
 
  __*`fast`* (optional)__  
 When speed is more important than quality. Will produce blocky artifacts if color differences are too big.  
-I found it still usefull for large radii like 30 where the artifacts are no longer noticable, or to fix something like a prefilter.  
+I found it useful for radius > 30 where artifacts are no longer noticable, or to fix something like a prefilter.  
 In fast mode radius needs to be a little higher to archive a similar effect.
 
 ## Wavelet Color Fix
@@ -81,4 +59,4 @@ Which planes to color fix. Any unprocessed planes will simply be copied.
 If not used, all planes will be color fixed.
 
 ## Tips & Troubleshooting
-If you are having transfer issues because your clips are not sufficiently aligned, try this: https://github.com/pifroggi/vs_align
+If your clips are not sufficiently aligned, try this: https://github.com/pifroggi/vs_align
