@@ -27,11 +27,11 @@ Lower means a more local color match and smaller bloom/bleed. Too low and the re
 Test values 5 and 30 and this will become more clear.
 
 __*`planes`* (optional)__  
-Which planes to color fix. Any unprocessed planes will simply be copied.  
-If not set, all planes will be color fixed.
+Which planes to color fix. Any unmentioned planes will simply be copied.  
+If nothing is set, all planes will be color fixed.
 
  __*`fast`* (optional)__  
-When you want to optimize your script for speed instead of quality. Will produce blocky artifacts with a low radius.  
+To optimize your script for maximum speed. Will produce blocky artifacts with a low radius.  
 I found it useful for radius > 30 where artifacts are no longer noticable, or to fix something like a prefilter.
 
 ## Wavelet Color Fix
@@ -55,8 +55,8 @@ Lower means a more local color match and smaller bloom/bleed. Too low and the re
 Test values 3 and 10 and this will become more clear.
 
 __*`planes`* (optional)__  
-Which planes to color fix. Any unprocessed planes will simply be copied.  
-If not set, all planes will be color fixed.
+Which planes to color fix. Any unmentioned planes will simply be copied.  
+If nothing is set, all planes will be color fixed.
 
 ## Tips & Troubleshooting
 If your clips are not sufficiently aligned, try this: https://github.com/pifroggi/vs_align
