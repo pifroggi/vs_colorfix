@@ -48,7 +48,7 @@ def wavelet_reconstruction(content_feat: torch.Tensor, style_feat: torch.Tensor,
     _, style_low_freq = wavelet_decomposition(style_feat, levels=levels)
     return content_high_freq + style_low_freq
 
-def wavelet(clip, ref, wavelets=5, planes=None, device="cuda"):
+def wavelet(clip, ref, wavelets=5, planes=None, device="cpu"):
     supported_formats = [vs.RGBS, vs.RGBH, vs.YUV444PS, vs.YUV444PH, vs.GRAYS, vs.GRAYH]
     clip_format = clip.format.id
     num_planes  = clip.format.num_planes
