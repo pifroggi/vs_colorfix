@@ -60,7 +60,7 @@ If nothing is set, all planes will be color fixed.
 
 __*`device`* (optional)__  
 "cpu" to do processing on CPU, or "cuda" for Nvidia GPU.  
-YUV444PH, RGBH, or GRAYH format will double speed if your GPU supports fp16.
+YUV444PH, RGBH, or GRAYH format will additionally double speed if your GPU supports fp16.
 
 ## Tips & Troubleshooting
 If your clips are not sufficiently aligned, try this: https://github.com/pifroggi/vs_align
