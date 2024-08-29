@@ -4,8 +4,8 @@ For example for transfering colors from one source to another, or fixing color s
 Example fixing colors after upscaling a DVD: https://imgsli.com/MjM5NzM5/0/2
 
 ### Requirements
-* pip install numpy
 * [pytorch](https://pytorch.org/) 
+* `pip install numpy`
 
 ## Average Color Fix
 Correct for color shift by matching the average color of a clip to that of a reference clip. This is a very fast way to transfer the colors from one clip to another that has the same or close to the same content, but different colors. Idea from [chaiNNer](https://github.com/chaiNNer-org/chaiNNer).
