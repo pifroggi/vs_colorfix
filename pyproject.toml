@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vs_colorfix"
+version = "1.0.0"
+description = "Color Fix, Color Transfer, or Color Match functions for Vapoursynth"
+authors = [{ name = "pifroggi" }]
+license = { text = "MIT" }
+
+dependencies = [
+    "torch",
+    "numpy"
+]
+
+[project.urls]
+Home-page = "https://github.com/pifroggi/vs_colorfix"
+Repository = "https://github.com/pifroggi/vs_colorfix"
