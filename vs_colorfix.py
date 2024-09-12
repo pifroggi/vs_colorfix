@@ -53,7 +53,7 @@ def wavelet(clip, ref, wavelets=5, planes=None, device="cpu"):
     clip_format = clip.format.id
     num_planes  = clip.format.num_planes
     if clip_format not in supported_formats or ref.format.id not in supported_formats:
-        raise ValueError("Input clips must be in RGBS, YUV444PS, or GRAYS format.")
+        raise ValueError("Input clips must be in RGBS, RGBH, YUV444PS, YUV444PH, GRAYS, or GRAYH format.")
     if clip_format != ref.format.id:
         raise ValueError("Clip and ref must have the same format.")
     if planes is None:
@@ -64,7 +64,7 @@ def wavelet(clip, ref, wavelets=5, planes=None, device="cpu"):
         planes = [0]
     if ref.width != clip.width or ref.height != clip.height:
         ref = core.resize.Bicubic(ref, width=clip.width, height=clip.height)
-    fp16 = device != "cpu" and clip.format.id in [vs.RGBH, vs.YUV444PH, vs.GRAYH]
+    fp16 = device != "cpu" and clip_format in [vs.RGBH, vs.YUV444PH, vs.GRAYH]
     UV   = clip_format in [vs.YUV444PS, vs.YUV444PH] and any(p > 0 for p in planes)
 
     def wavelet_color_fix(n, f, levels=wavelets):
