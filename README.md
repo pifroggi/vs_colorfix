@@ -7,6 +7,12 @@ Example fixing colors after upscaling a DVD: https://imgsli.com/MjM5NzM5/0/2
 * [pytorch](https://pytorch.org/) 
 * `pip install numpy`
 
+### Setup
+Put the `vs_colorfix.py` file into your vapoursynth scripts folder.  
+Or install via pip: `pip install git+https://github.com/pifroggi/vs_colorfix.git`
+
+<br />
+
 ## Average Color Fix
 Correct for color shift by matching the average color of a clip to that of a reference clip. This is a very fast way to transfer the colors from one clip to another that has the same or close to the same content, but different colors. Idea from [chaiNNer](https://github.com/chaiNNer-org/chaiNNer).
 
@@ -59,8 +65,10 @@ Which planes to color fix. Any unmentioned planes will simply be copied.
 If nothing is set, all planes will be color fixed.
 
 __*`device`* (optional)__  
-"cpu" to do processing on CPU, or "cuda" for Nvidia GPU.  
-YUV444PH, RGBH, or GRAYH format will additionally double speed if your GPU supports fp16.
+"cpu" to use the CPU, or "cuda" to use an Nvidia GPU.  
+YUV444PH, RGBH, or GRAYH format will additionally double speed if the GPU supports fp16.
+
+<br />
 
 ## Tips & Troubleshooting
 If your clips are not sufficiently aligned, try this: https://github.com/pifroggi/vs_align
