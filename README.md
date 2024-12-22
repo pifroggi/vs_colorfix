@@ -4,8 +4,8 @@ For example for transfering colors from one source to another, or fixing color s
 Example fixing colors after upscaling a DVD: https://imgsli.com/MjM5NzM5/0/2
 
 ### Requirements
-* [pytorch](https://pytorch.org/) 
-* `pip install numpy`
+* [pytorch with cuda](https://pytorch.org/) *(optional, only for Wavelet Color Fix)*
+* `pip install numpy` *(optional, only for Wavelet Color Fix)*
 
 ### Setup
 Put the `vs_colorfix.py` file into your vapoursynth scripts folder.  
@@ -38,7 +38,7 @@ If nothing is set, all planes will be color fixed.
 
  __*`fast`* (optional)__  
 To optimize your script for maximum speed. Will produce blocky artifacts with a low radius.  
-I found it useful for radius > 30 where artifacts are no longer noticable, or to fix something like a prefilter.
+I found it useful for radius > 30 where artifacts are no longer noticable, or to fix something like a prefilter clip.
 
 ## Wavelet Color Fix
 Correct for color shift by first separating a clip into different frequencies (wavelets), then matching the average color to that of a reference clip. This works similarly to the Average Color Fix, but produces better results at the cost of more computation. Both clips must have close to the same content. The Wavelet Color Fix functions are from [sd-webui-stablesr](https://github.com/pkuliyi2015/sd-webui-stablesr/blob/master/srmodule/colorfix.py).  
@@ -65,10 +65,13 @@ Which planes to color fix. Any unmentioned planes will simply be copied.
 If nothing is set, all planes will be color fixed.
 
 __*`device`* (optional)__  
-"cpu" to use the CPU, or "cuda" to use an Nvidia GPU.  
-YUV444PH, RGBH, or GRAYH format will additionally double speed if the GPU supports fp16.
+Device can be "cpu" to use the CPU, or "cuda" to use an Nvidia GPU.  
+YUV444PH, RGBH, or GRAYH format will additionally __double speed__ if the GPU supports fp16.
 
 <br />
 
 ## Tips & Troubleshooting
-If your clips are not sufficiently aligned, try this: https://github.com/pifroggi/vs_align
+> [!TIP]
+> * If your clips are not sufficiently aligned or synchronized, try this: https://github.com/pifroggi/vs_align
+> * To replicate chaiNNers Average Color Fix, you can convert percentage to radius: `(100/percentage-1)/2 = radius`  
+>   ChaiNNers processing works like fast=True does here, but it is recommended to leave it off for better results.
