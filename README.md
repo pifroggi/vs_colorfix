@@ -73,5 +73,5 @@ YUV444PH, RGBH, or GRAYH format will additionally __double speed__ if the GPU su
 ## Tips & Troubleshooting
 > [!TIP]
 > * If your clips are not sufficiently aligned or synchronized, try this: https://github.com/pifroggi/vs_align
-> * To replicate chaiNNers Average Color Fix, you can convert percentage to radius: `(100/percentage-1)/2 = radius`  
->   ChaiNNers processing works like fast=True does here, but it is recommended to leave it off for better results.
+> * To replicate chaiNNers Average Color Fix, you can convert % to radius: `radius = (100/percentage-1)/2`  
+>   ChaiNNer works like fast=True does here, but it is recommended to leave it off for better results.
