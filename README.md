@@ -39,7 +39,7 @@ Which planes to color fix. Any unmentioned planes will simply be copied.
 If nothing is set, all planes will be color fixed.
 
  __*`fast`* (optional)__  
-The averaging is done via a downscale instead of a blur, which is much faster, but will produce faint blocky artifacts.  
+Does the averaging via a downscale instead of a blur, which is much faster, but will produce faint blocky artifacts.  
 I found it useful for radius > 30 where artifacts are no longer noticable, or to fix something like a prefilter clip.
 
 ## Wavelet Color Fix
@@ -47,7 +47,7 @@ Correct for color shift by first separating a clip into different frequencies (w
 
 ```python
 import vs_colorfix
-clip = vs_colorfix.wavelet(clip, ref, wavelets=5, planes=[0, 1, 2], device="cpu")
+clip = vs_colorfix.wavelet(clip, ref, wavelets=5, planes=[0, 1, 2], device="cuda")
 ```
 
 __*`clip`*__  
