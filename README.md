@@ -16,8 +16,10 @@ Or install via pip: `pip install git+https://github.com/pifroggi/vs_colorfix.git
 ## Average Color Fix
 Correct for color shift by matching the average color of a clip to that of a reference clip. This is a very fast way to transfer the colors from one clip to another that has the same or close to the same content, but different colors. Idea from [chaiNNer](https://github.com/chaiNNer-org/chaiNNer).
 
-    import vs_colorfix
-    clip = vs_colorfix.average(clip, ref, radius=10, planes=[0, 1, 2], fast=False)
+```python
+import vs_colorfix
+clip = vs_colorfix.average(clip, ref, radius=10, planes=[0, 1, 2], fast=False)
+```
 
 __*`clip`*__  
 Clip where the color fix will be applied to.  
@@ -37,14 +39,16 @@ Which planes to color fix. Any unmentioned planes will simply be copied.
 If nothing is set, all planes will be color fixed.
 
  __*`fast`* (optional)__  
-To optimize your script for maximum speed. Will produce blocky artifacts with a low radius.  
+The averaging is done via a downscale instead of a blur, which is much faster, but will produce faint blocky artifacts.  
 I found it useful for radius > 30 where artifacts are no longer noticable, or to fix something like a prefilter clip.
 
 ## Wavelet Color Fix
 Correct for color shift by first separating a clip into different frequencies (wavelets), then matching the average color to that of a reference clip. This works similarly to the Average Color Fix, but produces better results at the cost of more computation. Both clips must have close to the same content. The Wavelet Color Fix functions are from [sd-webui-stablesr](https://github.com/pkuliyi2015/sd-webui-stablesr/blob/master/srmodule/colorfix.py).  
 
-    import vs_colorfix
-    clip = vs_colorfix.wavelet(clip, ref, wavelets=5, planes=[0, 1, 2], device="cpu")
+```python
+import vs_colorfix
+clip = vs_colorfix.wavelet(clip, ref, wavelets=5, planes=[0, 1, 2], device="cpu")
+```
 
 __*`clip`*__  
 Clip where the color fix will be applied to.  
