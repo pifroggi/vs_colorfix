@@ -9,7 +9,7 @@ import warnings
 
 core = vs.core
 
-def wavelet(clip, ref, wavelets=5, planes=None, device="cpu"):
+def wavelet(clip, ref, wavelets=5, planes=None, device="cuda"):
     import numpy as np
     import torch
     import torch.nn.functional as F
