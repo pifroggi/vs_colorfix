@@ -1,15 +1,16 @@
 # Color Fix functions for Vapoursynth
 
-For example for transfering colors from one source to another, or fixing color shift from AI upscaling/restoration models. Also knows as Color Transfer or Color Matching sometimes.  
+For example for transfering colors from one source to another, or fixing color shift from AI upscaling/restoration models. Also known as Color Transfer or Color Matching sometimes.  
 Example fixing colors after upscaling a DVD: https://imgsli.com/MjM5NzM5/0/2
 
 ### Requirements
 * [pytorch with cuda](https://pytorch.org/) *(optional, only for Wavelet Color Fix)*
 * `pip install numpy` *(optional, only for Wavelet Color Fix)*
+* [vszip](https://github.com/dnjulek/vapoursynth-zip) *(optional, speed boost for Average Color Fix)*
 
 ### Setup
 Put the `vs_colorfix.py` file into your vapoursynth scripts folder.  
-Or install via pip: `pip install git+https://github.com/pifroggi/vs_colorfix.git`
+Or install via pip: `pip install -U git+https://github.com/pifroggi/vs_colorfix.git`
 
 <br />
 
