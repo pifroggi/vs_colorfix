@@ -18,9 +18,12 @@ def wavelet(clip, ref, wavelets=5, planes=None, device="cuda"):
     clip_format = clip.format.id
     num_planes = clip.format.num_planes
     if clip_format not in supported_formats or ref.format.id not in supported_formats:
-        raise ValueError("Input clips must be in RGBS, RGBH, YUV444PS, YUV444PH, GRAYS, or GRAYH format. When using a GPU with fp16 support, RGBH, YUV444PH or GRAYH is recommended to double speed.")
+        raise ValueError("vs_colorfix: Input clips must be in RGBS, RGBH, YUV444PS, YUV444PH, GRAYS, or GRAYH format. When using a GPU with fp16 support, RGBH, YUV444PH or GRAYH is recommended to double speed.")
     if clip_format != ref.format.id:
-        raise ValueError("Clip and ref must have the same format.")
+        raise ValueError("vs_colorfix: Clip and ref must have the same format.")
+    if device == "cuda" and clip_format not in [vs.RGBH, vs.YUV444PH, vs.GRAYH] and torch.cuda.get_device_capability()[0] >= 7:
+        warnings.simplefilter("always", UserWarning)
+        warnings.warn("vs_colorfix: Your GPU likely supports fp16. Try RGBH, YUV444PH, or GRAYH input for double speed.", UserWarning, stacklevel=2)
     if planes is None:
         planes = list(range(num_planes))
     if isinstance(planes, int):
@@ -29,7 +32,7 @@ def wavelet(clip, ref, wavelets=5, planes=None, device="cuda"):
         planes = [0]
     if ref.width != clip.width or ref.height != clip.height:
         ref = core.resize.Bicubic(ref, width=clip.width, height=clip.height)
-    fp16 = device != "cpu" and clip_format in [vs.RGBH, vs.YUV444PH, vs.GRAYH]
+    fp16 = device == "cuda" and clip_format in [vs.RGBH, vs.YUV444PH, vs.GRAYH]
     UV = clip_format in [vs.YUV444PS, vs.YUV444PH] and any(p > 0 for p in planes)
 
     def tensor_to_frame(tensor: torch.Tensor, frame: vs.VideoFrame):
@@ -103,16 +106,17 @@ def wavelet(clip, ref, wavelets=5, planes=None, device="cuda"):
 def average(clip, ref, radius=10, planes=None, fast=False):
     num_planes = clip.format.num_planes
     if clip.format.id != ref.format.id:
-        raise ValueError("Clip and ref must have the same format. 16 bit input is recommended to avoid banding.")
+        raise ValueError("vs_colorfix: Clip and ref must have the same format. 16 bit input is recommended to avoid banding.")
     if clip.format.bits_per_sample <= 8 or ref.format.bits_per_sample <= 8:
         warnings.simplefilter("always", UserWarning)
-        warnings.warn("Input clips have a low bit depth, which will cause banding. 16 bit input is recommended.", UserWarning, stacklevel=2)
+        warnings.warn("vs_colorfix: Input clips have a low bit depth, which will cause banding. 16 bit input is recommended.", UserWarning, stacklevel=2)
     if planes is None:
         planes = list(range(num_planes))
     if isinstance(planes, int):
         planes = [planes]
     if num_planes == 1:
         planes = [0]
+    BOXBLUR = core.vszip.BoxBlur if hasattr(core,"vszip") else core.std.BoxBlur
 
     # downscale both clips, calculate difference (faster but faint blocky artifacts)
     if fast:
@@ -156,14 +160,14 @@ def average(clip, ref, radius=10, planes=None, fast=False):
         blurred_clip = clip
         blurred_ref = ref
         if 0 in planes:
-            blurred_clip = core.std.BoxBlur(blurred_clip, hradius=radius, hpasses=4, vradius=radius, vpasses=4, planes=[0])
-            blurred_ref = core.std.BoxBlur(blurred_ref, hradius=radius, hpasses=4, vradius=radius, vpasses=4, planes=[0])
+            blurred_clip = BOXBLUR(blurred_clip, hradius=radius, hpasses=4, vradius=radius, vpasses=4, planes=[0])
+            blurred_ref = BOXBLUR(blurred_ref, hradius=radius, hpasses=4, vradius=radius, vpasses=4, planes=[0])
         if 1 in planes:
-            blurred_clip = core.std.BoxBlur(blurred_clip, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[1])
-            blurred_ref = core.std.BoxBlur(blurred_ref, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[1])
+            blurred_clip = BOXBLUR(blurred_clip, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[1])
+            blurred_ref = BOXBLUR(blurred_ref, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[1])
         if 2 in planes:
-            blurred_clip = core.std.BoxBlur(blurred_clip, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[2])
-            blurred_ref = core.std.BoxBlur(blurred_ref, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[2])
+            blurred_clip = BOXBLUR(blurred_clip, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[2])
+            blurred_ref = BOXBLUR(blurred_ref, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[2])
         diff_clip = core.std.MakeDiff(blurred_ref, blurred_clip, planes=planes)
 
     # add difference to the original
