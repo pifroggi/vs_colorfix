@@ -1,4 +1,4 @@
-# Color Fix functions for Vapoursynth
+# Color Fix functions for VapourSynth
 
 For example for transfering colors from one source to another, or fixing color shift from AI upscaling/restoration models. Also known as Color Transfer or Color Matching sometimes.  
 Example fixing colors after upscaling a DVD: https://imgsli.com/MjM5NzM5/0/2
