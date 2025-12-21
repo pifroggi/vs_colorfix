@@ -44,7 +44,7 @@ Does the averaging via a downscale instead of a blur, which is much faster, but 
 I found it useful for radius > 30 where artifacts are no longer noticable, or to fix something like a prefilter clip.
 
 ## Wavelet Color Fix
-Correct for color shift by first separating a clip into different frequencies (wavelets), then matching the average color to that of a reference clip. This works similarly to the Average Color Fix, but produces better results at the cost of more computation. Both clips must have close to the same content. The Wavelet Color Fix functions are from [sd-webui-stablesr](https://github.com/pkuliyi2015/sd-webui-stablesr/blob/master/srmodule/colorfix.py).  
+Correct for color shift by first separating a clip into different frequencies (wavelets), then matching the average color to that of a reference clip. This works similarly to the Average Color Fix, but produces less bloom/bleed at the cost of more computation. Both clips must have close to the same content. The Wavelet Color Fix functions are from [sd-webui-stablesr](https://github.com/pkuliyi2015/sd-webui-stablesr/blob/master/srmodule/colorfix.py).  
 
 ```python
 import vs_colorfix
