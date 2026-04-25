@@ -13,10 +13,20 @@ def wavelet(clip, ref, wavelets=5, planes=None, device="cuda"):
     import numpy as np
     import torch
     import torch.nn.functional as F
-
+    
+    if not isinstance(clip, vs.VideoNode):
+        raise TypeError("vs_colorfix: Clip must be a vapoursynth clip.")
+    if not isinstance(ref, vs.VideoNode):
+        raise TypeError("vs_colorfix: Ref must be a vapoursynth clip.")
+    if clip.format.id == vs.PresetVideoFormat.NONE or clip.width == 0 or clip.height == 0:
+        raise TypeError("vs_colorfix: Clip must have constant format and dimensions.")
+    if ref.format.id  == vs.PresetVideoFormat.NONE or  ref.width == 0 or  ref.height == 0:
+        raise TypeError("vs_colorfix: Ref must have constant format and dimensions.")
+    
     supported_formats = [vs.RGBS, vs.RGBH, vs.YUV444PS, vs.YUV444PH, vs.GRAYS, vs.GRAYH]
     clip_format = clip.format.id
     num_planes = clip.format.num_planes
+    
     if clip_format not in supported_formats or ref.format.id not in supported_formats:
         raise ValueError("vs_colorfix: Input clips must be in RGBS, RGBH, YUV444PS, YUV444PH, GRAYS, or GRAYH format. When using a GPU with fp16 support, RGBH, YUV444PH or GRAYH is recommended to double speed.")
     if clip_format != ref.format.id:
@@ -104,7 +114,17 @@ def wavelet(clip, ref, wavelets=5, planes=None, device="cuda"):
 
 
 def average(clip, ref, radius=10, planes=None, fast=False):
+    if not isinstance(clip, vs.VideoNode):
+        raise TypeError("vs_colorfix: Clip must be a vapoursynth clip.")
+    if not isinstance(ref, vs.VideoNode):
+        raise TypeError("vs_colorfix: Ref must be a vapoursynth clip.")
+    if clip.format.id == vs.PresetVideoFormat.NONE or clip.width == 0 or clip.height == 0:
+        raise TypeError("vs_colorfix: Clip must have constant format and dimensions.")
+    if ref.format.id  == vs.PresetVideoFormat.NONE or  ref.width == 0 or  ref.height == 0:
+        raise TypeError("vs_colorfix: Ref must have constant format and dimensions.")
+    
     num_planes = clip.format.num_planes
+    
     if clip.format.id != ref.format.id:
         raise ValueError("vs_colorfix: Clip and ref must have the same format. 16 bit input is recommended to avoid banding.")
     if clip.format.bits_per_sample <= 8 or ref.format.bits_per_sample <= 8:
