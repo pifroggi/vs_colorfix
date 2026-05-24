@@ -2,17 +2,20 @@
 
 For example for fixing color shift from AI upscaling/restoration models, or transfering color grading from an old release to a remaster. Also known as Color Transfer or Color Matching. See this collection of [Comparisons](https://slow.pics/c/abXjnKn3).
 
+<br />
+
 <p align="center">
   <a href="https://slow.pics/c/abXjnKn3">
-    <img src="README_img.png" width="537" />
+    <img src="README_img.png" width="600" />
   </a>
 </p>
 
+<br />
 
 ### Requirements
-The Average Color Fix will work without these. For the Wavelet Color Fix, you only need to install the backends you intend to use. Check the backend parameter docs and benchmarks below for more information.
-* [vs-mlrt with NCNN, DirectML, or TensorRT](https://github.com/AmusementClub/vs-mlrt) *(optional GPU backends in Wavelet Color Fix)*
-* [vapoursynth-ATWT](https://github.com/yuygfgg/Vapoursynth-ATWT) *(optional CPU backend in Wavelet Color Fix)*
+You only need to install the backends you intend to use. Check the backend parameter docs and benchmarks below for more information.
+* [vs-mlrt with NCNN, DirectML, or TensorRT](https://github.com/AmusementClub/vs-mlrt) *(optional GPU backends for Wavelet Color Fix)*
+* [vapoursynth-ATWT](https://github.com/yuygfgg/Vapoursynth-ATWT) *(optional CPU backend for Wavelet Color Fix)*
 * [vszip](https://github.com/dnjulek/vapoursynth-zip) *(optional speed boost for Average Color Fix)*
 
 ### Setup
@@ -30,10 +33,10 @@ clip = vs_colorfix.average(clip, ref, radius=10, planes=[0, 1, 2], fast=False)
 ```
 
 __*`clip`*__  
-Clip where the colors will be applied to. Recommended higher than 8-bit avoid banding.
+Clip where the colors will be applied to. Recommended higher than 8-bit to avoid banding.
 
 __*`ref`*__  
-Reference clip where the colors are taken from. Recommended higher than 8-bit avoid banding.
+Reference clip where the colors are taken from. Recommended higher than 8-bit to avoid banding.
 
 __*`radius`*__  
 Higher means a more global color match and wider bloom/bleed.  
@@ -64,10 +67,10 @@ clip = vs_colorfix.wavelet(clip, ref, wavelets=4, planes=[0, 1, 2], backend="ncn
 ```
 
 __*`clip`*__  
-Clip where the colors will be applied to. Recommended higher than 8-bit avoid banding.
+Clip where the colors will be applied to. Recommended higher than 8-bit to avoid banding.
 
 __*`ref`*__  
-Reference clip where the colors are taken from. Recommended higher than 8-bit avoid banding.
+Reference clip where the colors are taken from. Recommended higher than 8-bit to avoid banding.
 
 __*`wavelets`*__  
 Number of wavelets in the range 1-10. 3-5 seems to work best in most cases.  
@@ -80,8 +83,8 @@ Which planes to color fix. Any unmentioned planes will simply be copied.
 If not set, all planes will be color-fixed.
 
 __*`backend`* (optional)__  
-The backend used to run the color fix. **16-bit float input is always much faster on GPU, but not supported by older GPUs.**
-* `cpu` CPU mode using the Vapoursynth-ATWT plugin (slow).
+The used backend. **16-bit float input is always much faster on GPU, but not supported by older GPUs.**
+* `cpu` CPU mode using the vapoursynth-ATWT plugin (slow).
 * `ncnn` GPU mode using vs-mlrt with NCNN support. Works on almost any GPU, even MAC (fast).
 * `directml` GPU mode using vs-mlrt with DirectML support. Works on most GPUs, Windows only (fast).
 * `tensorrt` GPU mode using vs-mlrt with TensorRT support. Requires an Nvidia RTX GPU. On the first run, this mode will automatically build an engine, which may take a few minutes. Changing wavelets or input dimensions will trigger rebuilding, but build engines are stored *(very fast)*.
@@ -90,7 +93,7 @@ __*`num_streams`* (optional)__
 Number of parallel GPU streams. Higher can be faster, but requires more VRAM. Does not effect the CPU backend.
 
 __*`gpu_id`* (optional)__  
-GPU indes ID starting with 0 for the first compatible GPU. For example to switch between iGPU/dGPU. Does not effect the CPU backend.
+Which GPU to use starting from 0. Can be used to switch between iGPU/dGPU. Does not effect the CPU backend.
 
 __*`engine_folder`* (optional)__  
 Optional path to the TensorRT engine storage location. By default engines are stored in `vs_colorfix/engines`. Only effects the TensorRT backend.
