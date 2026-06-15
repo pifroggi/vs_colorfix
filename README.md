@@ -73,7 +73,7 @@ __*`ref`*__
 Reference clip where the colors are taken from. Recommended higher than 8-bit to avoid banding.
 
 __*`wavelets`*__  
-Number of wavelets in the range 1-10. 3-5 seems to work best in most cases.  
+Number of wavelets in the 1-10 range. 3-5 seems to work best in most cases.  
 Higher means a more global color match and wider bloom/bleed.  
 Lower means a more local color match and smaller bloom/bleed. Too low and the reference clip will become visible.  
 Test values 3 and 8 and this will become more clear.
@@ -84,9 +84,9 @@ If not set, all planes will be color-fixed.
 
 __*`backend`* (optional)__  
 The used backend. **16-bit float input is always much faster on GPU, but not supported by older GPUs.**
-* `cpu` CPU mode using the vapoursynth-ATWT plugin (slow).
-* `ncnn` GPU mode using vs-mlrt with NCNN support. Works on almost any GPU, even MAC (fast).
-* `directml` GPU mode using vs-mlrt with DirectML support. Works on most GPUs, Windows only (fast).
+* `cpu` CPU mode using the vapoursynth-ATWT plugin *(slow)*.
+* `ncnn` GPU mode using vs-mlrt with NCNN support. Works on almost any GPU, even Mac *(fast)*.
+* `directml` GPU mode using vs-mlrt with DirectML support. Works on most GPUs, Windows only *(fast)*.
 * `tensorrt` GPU mode using vs-mlrt with TensorRT support. Requires an Nvidia RTX GPU. On the first run, this mode will automatically build an engine, which may take a few minutes. Changing wavelets or input dimensions will trigger rebuilding, but build engines are stored *(very fast)*.
 
 __*`num_streams`* (optional)__  
