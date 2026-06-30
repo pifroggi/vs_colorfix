@@ -88,14 +88,17 @@ def _get_engine(onnx_path, engine_dir, engine_w, engine_h, num_planes, precision
     
     # else build new engine
     logging.warning("vs_colorfix.wavelet: Building new TensorRT engine for width=%d, height=%d and precision=fp%d. This may take a few minutes.", engine_w, engine_h, precision)
-    opt_shapes = f"input:1x{num_planes*2}x{engine_h}x{engine_w}"
+    trt_version = int(core.trt.Version()["tensorrt_version"].decode(errors="ignore"))
+    trt_version = [trt_version // 10000, (trt_version % 10000) // 100, trt_version % 100]
+    io_formats  = f"fp{precision}:chw" if trt_version[0] < 11 else "chw"
+    opt_shapes  = f"input:1x{num_planes*2}x{engine_h}x{engine_w}"
     cmd = [
         str(trtexec_path),
         "--stronglyTyped",
-        f"--inputIOFormats=fp{precision}:chw",
-        f"--outputIOFormats=fp{precision}:chw",
         "--skipInference",
         "--memPoolSize=workspace:4096",
+        f"--inputIOFormats={io_formats}",
+        f"--outputIOFormats={io_formats}",
         f"--onnx={onnx_path}",
         f"--saveEngine={engine_path}",
         f"--optShapes={opt_shapes}",
