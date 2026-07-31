@@ -1,4 +1,4 @@
-# Color Fix functions for VapourSynth
+# Color Fix for VapourSynth
 
 For example for fixing color shift from AI upscaling/restoration models, or transfering color grading from an old release to a remaster. Also known as Color Transfer or Color Matching. See this collection of [Comparisons](https://slow.pics/c/abXjnKn3).
 
