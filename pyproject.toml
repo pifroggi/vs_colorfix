@@ -1,18 +1,46 @@
 [build-system]
-requires = ["setuptools>=77.0.3", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
 
 [project]
 name = "vs_colorfix"
-version = "2.0.0"
-description = "Color Fix, Color Transfer, or Color Match functions for Vapoursynth"
+version = "2.1.0"
+description = "Color Fix, Color Transfer, or Color Match for VapourSynth."
+readme = "README.md"
+requires-python = ">=3.12"
 authors = [{ name = "pifroggi" }]
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 
-[tool.setuptools.package-data]
-vs_colorfix = ["models/*.onnx"]
+keywords = [
+	"vapoursynth",
+	"video",
+	"color matching",
+	"color transfer",
+	"color fix",
+	"filtering"
+]
+
+classifiers = [
+	"Programming Language :: Python :: 3",
+	"Topic :: Multimedia :: Video",
+  "Environment :: GPU",
+]
+
+dependencies = [
+	"vapoursynth>=74",
+	"vapoursynth-vszip",
+	"vapoursynth-mlrt-ncnn",
+	"vapoursynth-mlrt-ort; sys_platform == 'win32'"
+]
+
+[project.optional-dependencies]
+tensorrt = [
+	"vapoursynth-mlrt-trt>=16.0; sys_platform == 'win32' or sys_platform == 'linux'",
+	"tensorrt-cu13>=11.1.0.106; sys_platform == 'win32' or sys_platform == 'linux'"
+]
 
 [project.urls]
-Home-page = "https://github.com/pifroggi/vs_colorfix"
+Homepage = "https://github.com/pifroggi/vs_colorfix"
 Repository = "https://github.com/pifroggi/vs_colorfix"
+Issues = "https://github.com/pifroggi/vs_colorfix/issues"
