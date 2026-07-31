@@ -28,7 +28,7 @@ def _box_blur(clip, planes=None, hradius=1, hpasses=1, vradius=1, vpasses=1):
 
 def _make_diff(clipa, clipb, planes=None):
     # makes makediff work on 16-bit float
-    if clipa.format.sample_type == vs.FLOAT and clipa.format.bits_per_sample == 16:
+    if clipa.format.sample_type == vs.FLOAT and clipa.format.bits_per_sample == 16 and vs.__version__.release_major < 78:
         return _expression([clipa, clipb], expr=["x y -" if i in planes else "" for i in range(clipa.format.num_planes)])
     else:
         return core.std.MakeDiff(clipa, clipb, planes=planes)
@@ -36,7 +36,7 @@ def _make_diff(clipa, clipb, planes=None):
 
 def _merge_diff(clipa, clipb, planes=None):
     # makes mergediff work on 16-bit float
-    if clipa.format.sample_type == vs.FLOAT and clipa.format.bits_per_sample == 16:
+    if clipa.format.sample_type == vs.FLOAT and clipa.format.bits_per_sample == 16 and vs.__version__.release_major < 78:
         return _expression([clipa, clipb], expr=["x y +" if i in planes else "" for i in range(clipa.format.num_planes)])
     else:
         return core.std.MergeDiff(clipa, clipb, planes=planes)
@@ -63,8 +63,8 @@ def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
         raise TypeError("vs_colorfix.average: Clip must have constant format and dimensions.")
     if ref.format.id  == vs.PresetVideoFormat.NONE or  ref.width == 0 or  ref.height == 0:
         raise TypeError("vs_colorfix.average: Ref must have constant format and dimensions.")
-    if clip.format.sample_type == vs.FLOAT and clip.format.bits_per_sample == 16:
-        raise ValueError("vs_colorfix.average: 16-bit float formats is not supported.")  # vszip allows it, but creates artifacts https://github.com/dnjulek/vapoursynth-zip/issues/20
+    if clip.format.sample_type == vs.FLOAT and clip.format.bits_per_sample == 16 and vs.__version__.release_major < 78 and not hasattr(core, "vszip"):
+        raise ValueError("vs_colorfix.average: 16-bit float formats require vapoursynth version 78 or newer, or the plugin 'vszip' version 15.0.0 or newer.")
     if clip.format.id != ref.format.id:
         raise ValueError("vs_colorfix.average: Clip and ref must have the same format. 16-bit input is recommended to avoid banding.")
     if not isinstance(fast, bool):
