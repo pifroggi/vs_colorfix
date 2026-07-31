@@ -43,11 +43,11 @@ def _merge_diff(clipa, clipb, planes=None):
 
 
 def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
-    """Fixes color shift based on a reference clip. A very fast way to transfer the colors from one clip to another. For large color differences, `wavelet()` is more accurate. Both clips must have close to the same content.
+    """Fixes color shift based on a reference clip. A very fast way to transfer the colors from one clip to another. For large color differences, `wavelet()` is more accurate.
 
     Args:
-        clip: Clip where the color fix will be applied to. Recommended is a bit depth higher than 8 to avoid banding.
-        ref: Reference clip where the colors are taken from. Recommended is a bit depth higher than 8 to avoid banding.
+        clip: Clip where the color fix will be applied to.
+        ref: Reference clip where the colors are taken from. Should match the base clip somewhat. Compression, grain, or lower resolution are all okay.
         radius: Higher means a more global color match and wider bloom/bleed. Lower means a more local color match and smaller bloom/bleed. 
             Too low and the reference clip will become visible. Test values 5 and 30 and this will become more clear.
         planes: Which planes to color fix. Any unmentioned planes will simply be copied. None means all planes will be color fixed.
@@ -77,7 +77,6 @@ def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
     if fast and not (1 <= radius <= fast_max_radius):
         raise ValueError(f"vs_colorfix.average: Radius must be between 1 and {fast_max_radius} for the current input dimensions when fast=True.")
     if clip.format.bits_per_sample <= 8 or ref.format.bits_per_sample <= 8:
-        warnings.simplefilter("always", UserWarning)
         warnings.warn("vs_colorfix.average: Input clips have a low bit depth, which will cause banding. 16-bit input is recommended.", UserWarning, stacklevel=2)
     
     num_planes = clip.format.num_planes
