@@ -367,12 +367,12 @@ def _wavelet_color_fix_atwt(clip, ref, wavelets, planes):
 
 
 def wavelet_color_fix(clip, ref, wavelets=4, planes=None, backend="ncnn", num_streams=2, gpu_id=0, engine_folder=None):
-    """Fixes color shift based on a reference clip. Works similarly to `average()`, but more accurate when color differences are large, at the cost of more computation. Both clips must have close to the same content.
+    """Fixes color shift based on a reference clip. Works similarly to `average()`, but more accurate when color differences are large, at the cost of more computation.
 
     Args:
         clip: Clip where the color fix will be applied to.
-        ref: Reference clip where the colors are taken from.
-        wavelets: Number of wavelets, 3-5 seems to work best in most cases. Higher means a more global color match and wider bloom/bleed. Lower means a more 
+        ref: Reference clip where the colors are taken from. Should match the base clip somewhat. Compression, grain, or lower resolution are all okay.
+        wavelets: Number of wavelets, around 4 seems to work best in most cases. Higher means a more global color match and wider bloom/bleed. Lower means a more 
             local color match and smaller bloom/bleed. Lower is also faster. Too low and the reference clip will become visible. Test values 3 and 8 and this will become more clear.
         planes: Which planes to color fix. Any unmentioned planes will simply be copied. None means all planes will be color fixed.
         backend: The backend used to run the color fix. **16-bit float input is always much faster on GPU, but not supported by older GPUs.**
@@ -409,7 +409,6 @@ def wavelet_color_fix(clip, ref, wavelets=4, planes=None, backend="ncnn", num_st
     if num_streams < 1:
         raise ValueError("vs_colorfix.wavelet: Number of parallel GPU streams (num_streams) must be at least 1.")
     if clip.format.bits_per_sample <= 8 or ref.format.bits_per_sample <= 8:
-        warnings.simplefilter("always", UserWarning)
         warnings.warn("vs_colorfix.wavelet: Input clips have a low bit depth, which will cause banding. 16-bit input is recommended.", UserWarning, stacklevel=2)
     
     clip_format = clip.format
