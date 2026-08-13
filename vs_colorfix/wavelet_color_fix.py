@@ -178,6 +178,7 @@ def _build_engine_python(onnx_path, engine_path, engine_w, engine_h, num_planes,
 
         # settings
         opt_shapes = (1, num_planes * 2, engine_h, engine_w)                                                              # optShapes
+        min_shapes = (1, num_planes * 2, engine_h, engine_w - 8)                                                          # minShapes
         network.get_input(0).allowed_formats = network.get_output(0).allowed_formats = 1 << int(trt.TensorFormat.LINEAR)  # IOFormats:chw
         config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 4096 << 20)                                            # workspace
         config.builder_optimization_level = 5                                                                             # builderOptimizationLevel=5
@@ -185,7 +186,7 @@ def _build_engine_python(onnx_path, engine_path, engine_w, engine_h, num_planes,
 
         # build
         profile = builder.create_optimization_profile()
-        profile.set_shape(network.get_input(0).name, opt_shapes, opt_shapes, opt_shapes)
+        profile.set_shape(network.get_input(0).name, min_shapes, opt_shapes, opt_shapes)  # avoid large engine sizes by making one dimension slightly dynamic
         config.add_optimization_profile(profile)
         engine  = builder.build_serialized_network(network, config)
     finally:
@@ -408,6 +409,8 @@ def wavelet_color_fix(clip, ref, wavelets=4, planes=None, backend="ncnn", num_st
         raise TypeError("vs_colorfix.wavelet: Number of parallel GPU streams (num_streams) must be an integer.")
     if num_streams < 1:
         raise ValueError("vs_colorfix.wavelet: Number of parallel GPU streams (num_streams) must be at least 1.")
+    if not isinstance(backend, str):
+        raise TypeError("vs_colorfix.wavelet: Backend must be a string.")
     if clip.format.bits_per_sample <= 8 or ref.format.bits_per_sample <= 8:
         warnings.warn("vs_colorfix.wavelet: Input clips have a low bit depth, which will cause banding. 16-bit input is recommended.", UserWarning, stacklevel=2)
     
