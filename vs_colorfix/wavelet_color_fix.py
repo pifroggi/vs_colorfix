@@ -108,6 +108,7 @@ def _build_engine_trtexec(onnx_path, engine_path, engine_w, engine_h, num_planes
 
     # settings
     opt_shapes = f"input:1x{num_planes*2}x{engine_h}x{engine_w}"
+    min_shapes = f"input:1x{num_planes*2}x{engine_h}x{engine_w - 8}"  # avoid large engine sizes due to saving constants by making one dimension slightly dynamic
     io_formats = f"fp{precision}:chw" if trt_version[0] < 11 else "chw"
     cmd = [
         str(trtexec_path),
@@ -120,7 +121,9 @@ def _build_engine_trtexec(onnx_path, engine_path, engine_w, engine_h, num_planes
         f"--outputIOFormats={io_formats}",
         f"--onnx={onnx_path}",
         f"--saveEngine={engine_path}",
+        f"--minShapes={min_shapes}",
         f"--optShapes={opt_shapes}",
+        f"--maxShapes={opt_shapes}",
         f"--device={gpu_id}",
     ]
 
@@ -186,7 +189,7 @@ def _build_engine_python(onnx_path, engine_path, engine_w, engine_h, num_planes,
 
         # build
         profile = builder.create_optimization_profile()
-        profile.set_shape(network.get_input(0).name, min_shapes, opt_shapes, opt_shapes)  # avoid large engine sizes by making one dimension slightly dynamic
+        profile.set_shape(network.get_input(0).name, min_shapes, opt_shapes, opt_shapes)  # avoid large engine sizes due to saving constants by making one dimension slightly dynamic
         config.add_optimization_profile(profile)
         engine  = builder.build_serialized_network(network, config)
     finally:
