@@ -4,42 +4,11 @@
 
 # Average Color Fix idea from chaiNNer https://github.com/chaiNNer-org/chaiNNer
 
-import vapoursynth as vs
 import warnings
+import vapoursynth as vs
+from .utils import box_blur, make_diff, merge_diff
 
 core = vs.core
-
-
-def _expression(clips, expr, format=None):
-    # optional plugin for slight speed boost
-    if hasattr(core, "akarin"):
-        return core.akarin.Expr(clips, expr, format=format)
-    else:
-        return core.std.Expr(clips, expr, format=format)
-
-
-def _box_blur(clip, planes=None, hradius=1, hpasses=1, vradius=1, vpasses=1):
-    # optional plugin for slight speed boost
-    if hasattr(core, "vszip"):
-        return core.vszip.BoxBlur(clip, planes=planes, hradius=hradius, hpasses=hpasses, vradius=vradius, vpasses=vpasses)
-    else:
-        return core.std.BoxBlur(clip, planes=planes, hradius=hradius, hpasses=hpasses, vradius=vradius, vpasses=vpasses)
-
-
-def _make_diff(clipa, clipb, planes=None):
-    # makes makediff work on 16-bit float
-    if clipa.format.sample_type == vs.FLOAT and clipa.format.bits_per_sample == 16 and vs.__version__.release_major < 78:
-        return _expression([clipa, clipb], expr=["x y -" if i in planes else "" for i in range(clipa.format.num_planes)])
-    else:
-        return core.std.MakeDiff(clipa, clipb, planes=planes)
-
-
-def _merge_diff(clipa, clipb, planes=None):
-    # makes mergediff work on 16-bit float
-    if clipa.format.sample_type == vs.FLOAT and clipa.format.bits_per_sample == 16 and vs.__version__.release_major < 78:
-        return _expression([clipa, clipb], expr=["x y +" if i in planes else "" for i in range(clipa.format.num_planes)])
-    else:
-        return core.std.MergeDiff(clipa, clipb, planes=planes)
 
 
 def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
@@ -99,7 +68,7 @@ def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
             ref_plane = core.std.ShufflePlanes(ref, planes=0, colorfamily=vs.GRAY)
             downscaled_clip_plane = core.resize.Bilinear(clip_plane, width=clip.width // radius, height=clip.height // radius)
             downscaled_ref_plane = core.resize.Bilinear(ref_plane, width=clip.width // radius, height=clip.height // radius)
-            diff_plane = _make_diff(downscaled_ref_plane, downscaled_clip_plane, planes=[0])
+            diff_plane = make_diff(downscaled_ref_plane, downscaled_clip_plane, planes=[0])
             processed_clips[0] = core.resize.Bilinear(diff_plane, width=clip.width, height=clip.height)
         else:
             processed_clips[0] = core.std.ShufflePlanes(clip, planes=0, colorfamily=vs.GRAY)
@@ -108,7 +77,7 @@ def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
             ref_plane = core.std.ShufflePlanes(ref, planes=1, colorfamily=vs.GRAY)
             downscaled_clip_plane = core.resize.Bilinear(clip_plane, width=clip.width // radius, height=clip.height // radius)
             downscaled_ref_plane = core.resize.Bilinear(ref_plane, width=clip.width // radius, height=clip.height // radius)
-            diff_plane = _make_diff(downscaled_ref_plane, downscaled_clip_plane, planes=[0])
+            diff_plane = make_diff(downscaled_ref_plane, downscaled_clip_plane, planes=[0])
             processed_clips[1] = core.resize.Bilinear(diff_plane, width=clip_plane.width, height=clip_plane.height)
         elif num_planes > 1:
             processed_clips[1] = core.std.ShufflePlanes(clip, planes=1, colorfamily=vs.GRAY)
@@ -117,7 +86,7 @@ def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
             ref_plane = core.std.ShufflePlanes(ref, planes=2, colorfamily=vs.GRAY)
             downscaled_clip_plane = core.resize.Bilinear(clip_plane, width=clip.width // radius, height=clip.height // radius)
             downscaled_ref_plane = core.resize.Bilinear(ref_plane, width=clip.width // radius, height=clip.height // radius)
-            diff_plane = _make_diff(downscaled_ref_plane, downscaled_clip_plane, planes=[0])
+            diff_plane = make_diff(downscaled_ref_plane, downscaled_clip_plane, planes=[0])
             processed_clips[2] = core.resize.Bilinear(diff_plane, width=clip_plane.width, height=clip_plane.height)
         elif num_planes > 2:
             processed_clips[2] = core.std.ShufflePlanes(clip, planes=2, colorfamily=vs.GRAY)
@@ -132,15 +101,15 @@ def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
         blurred_clip = clip
         blurred_ref = ref
         if 0 in planes:
-            blurred_clip = _box_blur(blurred_clip, hradius=radius, hpasses=4, vradius=radius, vpasses=4, planes=[0])
-            blurred_ref = _box_blur(blurred_ref, hradius=radius, hpasses=4, vradius=radius, vpasses=4, planes=[0])
+            blurred_clip = box_blur(blurred_clip, hradius=radius, hpasses=4, vradius=radius, vpasses=4, planes=[0])
+            blurred_ref = box_blur(blurred_ref, hradius=radius, hpasses=4, vradius=radius, vpasses=4, planes=[0])
         if 1 in planes:
-            blurred_clip = _box_blur(blurred_clip, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[1])
-            blurred_ref = _box_blur(blurred_ref, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[1])
+            blurred_clip = box_blur(blurred_clip, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[1])
+            blurred_ref = box_blur(blurred_ref, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[1])
         if 2 in planes:
-            blurred_clip = _box_blur(blurred_clip, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[2])
-            blurred_ref = _box_blur(blurred_ref, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[2])
-        diff_clip = _make_diff(blurred_ref, blurred_clip, planes=planes)
+            blurred_clip = box_blur(blurred_clip, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[2])
+            blurred_ref = box_blur(blurred_ref, hradius=chroma_hradius, hpasses=4, vradius=chroma_vradius, vpasses=4, planes=[2])
+        diff_clip = make_diff(blurred_ref, blurred_clip, planes=planes)
 
     # add difference to the original
-    return _merge_diff(clip, diff_clip, planes=planes)
+    return merge_diff(clip, diff_clip, planes=planes)
