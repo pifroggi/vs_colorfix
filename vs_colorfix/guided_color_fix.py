@@ -54,7 +54,7 @@ def _vsmlrt_inference(clip, ref, backend="ncnn", num_streams=1, gpu_id=0, engine
     return out
 
 
-def guided_color_fix(clip, ref, planes=None, backend="ncnn", num_streams=1, gpu_id=0, engine_folder=None):
+def guided_color_fix(clip, ref, planes=None, backend="tensorrt", num_streams=1, gpu_id=0, engine_folder=None):
     """Fixes color shift based on a reference clip. This approach is guided by a trained AI model that can intelligently transfer colors while avoiding the typical
         bleed/bloom that can occur in the Average or Wavelet Color Fix, but is much slower.
 
