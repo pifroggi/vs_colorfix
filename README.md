@@ -68,7 +68,7 @@ Useful for very large radii where artifacts are no longer noticeable, or to fix 
 <br />
 
 ## Wavelet Color Fix
-Fixes color shift by first converting into wavelets, then matching the average color of a clip to a reference clip. Works similarly to the Average Color Fix, but more accurate when the color differences are larger, at the cost of more computation.
+Fixes color shift by converting into wavelets, then matching the average color of a clip to a reference clip. Works similarly to the Average Color Fix, but more accurate when the color differences are larger, at the cost of more computation.
 
 ```python
 import vs_colorfix
@@ -115,7 +115,7 @@ Optional path to the TensorRT engine storage location. By default engines are st
 <br />
 
 ## Guided Color Fix
-This approach is guided by a trained AI model that can intelligently transfer colors while avoiding the typical bleed/bloom produced by the Average and Wavelet Color Fix when the shift is not uniform across the frame. This is much slower.
+Fixes colors guided by a trained AI model that can intelligently transfer colors from a reference while avoiding the bleed/bloom produced by the Average and Wavelet Color Fix when the shift is not uniform, but is much slower.
 
 ```python
 import vs_colorfix
