@@ -68,7 +68,7 @@ Useful for very large radii where artifacts are no longer noticeable, or to fix 
 <br />
 
 ## Wavelet Color Fix
-Fixes color shift by converting into wavelets, then matching the average color of a clip to a reference clip. Works similarly to the Average Color Fix, but more accurate when color differences are larger, at the cost of more computation.
+Fixes color shift by converting into wavelets, then matching the average color of a clip to a reference clip. Works similarly to the Average Color Fix, but more accurate for larger color differences, at the cost of more computation.
 
 ```python
 import vs_colorfix
