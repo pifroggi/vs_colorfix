@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vs_colorfix"
-version = "2.1.0"
+version = "2.2.0"
 description = "Color Fix, Color Transfer, or Color Match for VapourSynth."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -18,6 +18,10 @@ keywords = [
 	"color matching",
 	"color transfer",
 	"color fix",
+	"colour",
+	"tensorrt",
+	"directml",
+	"ncnn",
 	"filtering"
 ]
 
@@ -30,6 +34,7 @@ classifiers = [
 dependencies = [
 	"vapoursynth>=74",
 	"vapoursynth-vszip",
+	"vapoursynth-mlrt-ov",
 	"vapoursynth-mlrt-ncnn",
 	"vapoursynth-mlrt-ort; sys_platform == 'win32'"
 ]
