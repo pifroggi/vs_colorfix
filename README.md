@@ -115,7 +115,7 @@ Optional path to the TensorRT engine storage location. By default engines are st
 <br />
 
 ## Guided Color Fix
-Fixes colors guided by a trained AI model that can intelligently transfer colors from a reference while avoiding the bleed/bloom produced by the Average and Wavelet Color Fix when the shift is not uniform, but is much slower.
+Fixes color shift guided by a trained AI model that intelligently transfer colors from a reference while avoiding the bleed/bloom produced by the Average and Wavelet Color Fix when the shift is not uniform, but is much slower.
 
 ```python
 import vs_colorfix
