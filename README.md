@@ -40,12 +40,12 @@ clip = vs_colorfix.average(clip, ref, radius=10, planes=[0, 1, 2], fast=False)
 ```
 
 __*`clip`*__  
-Base clip where the colors will be applied to.  
+Base clip where the colors will be applied to. Any format.  
 Recommended higher than 8-bit to avoid banding.
 
 __*`ref`*__  
-Reference clip where the colors are taken from.  
-Check the [comparisons](https://slow.pics/c/abXjnKn3) to get an idea how close it should match the base clip.
+Reference clip where the colors are taken from. Must be the same format as the base clip.  
+Check the [comparisons](https://slow.pics/c/abXjnKn3) to get an idea how close the clips should match.
 
 __*`radius`*__  
 Higher means a more global color match and wider bloom/bleed.  
@@ -76,12 +76,12 @@ clip = vs_colorfix.wavelet(clip, ref, wavelets=4, planes=[0, 1, 2], backend="ncn
 ```
 
 __*`clip`*__  
-Base clip where the colors will be applied to.  
+Base clip where the colors will be applied to. Any format on CPU, must be float format on GPU.  
 Recommended higher than 8-bit to avoid banding.
 
 __*`ref`*__  
-Reference clip where the colors are taken from.  
-Check the [comparisons](https://slow.pics/c/abXjnKn3) to get an idea how close it should match the base clip.
+Reference clip where the colors are taken from. Must be the same format as the base clip.  
+Check the [comparisons](https://slow.pics/c/abXjnKn3) to get an idea how close the clips should match.
 
 __*`wavelets`*__  
 Number of wavelets in the 1-10 range. Around 4 seems to work best in most cases.  
@@ -123,12 +123,12 @@ clip = vs_colorfix.guided(clip, ref, planes=[0, 1, 2], backend="tensorrt", num_s
 ```
 
 __*`clip`*__  
-Base clip where the colors will be applied to.  
+Base clip where the colors will be applied to.
 Must be in float format.
 
 __*`ref`*__  
-Reference clip where the colors are taken from.  
-Check the [comparisons](https://slow.pics/c/abXjnKn3) to get an idea how close it should match the base clip.
+Reference clip where the colors are taken from. Must be the same format as the base clip.  
+Check the [comparisons](https://slow.pics/c/abXjnKn3) to get an idea how close the clips should match.
 
 __*`planes`* (optional)__  
 Which planes to color fix. Any unmentioned planes will simply be copied.  
