@@ -59,7 +59,7 @@ def guided_color_fix(clip, ref, planes=None, backend="tensorrt", num_streams=1, 
         bleed/bloom that can occur in the Average or Wavelet Color Fix, but is much slower.
 
     Args:
-        clip: Clip where the color fix will be applied to. Must be in 16-bit float format.
+        clip: Clip where the color fix will be applied to. Must be in float format.
         ref: Reference clip where the colors are taken from. Should match the base clip somewhat. Compression, grain, or lower resolution are all okay.
         planes: Which planes to color fix. Any unmentioned planes will simply be copied. None means all planes will be color fixed.
         backend: The backend used to run the color fix.
