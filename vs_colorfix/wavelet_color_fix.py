@@ -126,7 +126,7 @@ def wavelet_color_fix(clip, ref, wavelets=4, planes=None, backend="ncnn", num_st
         wavelets: Number of wavelets, around 4 seems to work best in most cases. Higher means a more global color match and wider bloom/bleed. Lower means a more 
             local color match and smaller bloom/bleed. Lower is also faster. Too low and the reference clip will become visible. Test values 3 and 8 and this will become more clear.
         planes: Which planes to color fix. Any unmentioned planes will simply be copied. None means all planes will be color fixed.
-        backend: The backend used to run the color fix. **16-bit float input is always much faster on GPU, but not supported by older GPUs.**
+        backend: The backend used to run the color fix.
             - `cpu` = CPU mode (slow).
             - `ncnn` = GPU mode using NCNN. Works on almost any GPU, even Mac (fast).
             - `directml` = GPU mode using DirectML. Works on most GPUs, but Windows only (fast).
@@ -169,7 +169,8 @@ def wavelet_color_fix(clip, ref, wavelets=4, planes=None, backend="ncnn", num_st
     clip_format = clip.format
     num_planes  = clip.format.num_planes
     backend     = backend.lower()
-    req_float32 = backend == "cpu" and clip_format.sample_type == vs.FLOAT and clip_format.bits_per_sample == 16  # convert float16 to float32 for atwt cpu backend
+    format_proc = clip_format.replace(bits_per_sample=32 if backend == "cpu" else 16) if clip_format.sample_type == vs.FLOAT else clip_format  # use float32 or keep int for atwt cpu backend, float16 for gpu backends
+    req_convert = clip_format.id != format_proc.id
     
     if backend in ["directml", "dml"] and sys.platform != "win32":
         raise RuntimeError("vs_colorfix.wavelet: The DirectML backend is only available on Windows.")
@@ -192,9 +193,9 @@ def wavelet_color_fix(clip, ref, wavelets=4, planes=None, backend="ncnn", num_st
     if ref.width != clip.width or ref.height != clip.height:
         ref = core.resize.Bilinear(ref, width=clip.width, height=clip.height)
     
-    # clamp, shift uv, convert to float32 if needed
+    # clamp, shift uv, convert precision if needed
     shift_uv   = False
-    copy_plane = "x" if req_float32 else ""  # empty expressions can not copy planes when changing formats
+    copy_plane = "x" if req_convert else ""  # empty expressions can not copy planes when changing formats
     if clip_format.sample_type == vs.FLOAT:
         clamp_expr = "x 0 max 1 min"
         if clip_format.color_family == vs.YUV:
@@ -206,8 +207,8 @@ def wavelet_color_fix(clip, ref, wavelets=4, planes=None, backend="ncnn", num_st
         else:
             expr = [clamp_expr if p in planes else copy_plane for p in range(num_planes)]
         
-        clip = expression(clip, expr=expr, format=clip_format.replace(bits_per_sample=32) if req_float32 else None)
-        ref  = expression(ref,  expr=expr, format=clip_format.replace(bits_per_sample=32) if req_float32 else None)
+        clip = expression(clip, expr=expr, format=format_proc if req_convert else None)
+        ref  = expression(ref,  expr=expr, format=format_proc if req_convert else None)
     
     # color fix
     if backend == "cpu":
@@ -215,9 +216,9 @@ def wavelet_color_fix(clip, ref, wavelets=4, planes=None, backend="ncnn", num_st
     else:
         clip = _wavelet_color_fix_vsmlrt(clip, ref, wavelets=wavelets, planes=planes, backend=backend, num_streams=num_streams, gpu_id=gpu_id, engine_folder=engine_folder)
     
-    # undo uv shift and float32 conversion
+    # undo uv shift and conversion
     if shift_uv:
-        return expression(clip, expr=["", "x 0.5 -" if 1 in planes else "", "x 0.5 -" if 2 in planes else ""])
-    if req_float32:
-        return core.resize.Point(clip, format=clip_format)
+        clip = expression(clip, expr=[copy_plane, "x 0.5 -" if 1 in planes else copy_plane, "x 0.5 -" if 2 in planes else copy_plane], format=clip_format if req_convert else None)
+    elif req_convert:
+        clip = core.resize.Point(clip, format=clip_format)
     return clip
