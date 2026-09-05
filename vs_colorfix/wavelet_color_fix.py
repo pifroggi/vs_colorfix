@@ -121,7 +121,7 @@ def wavelet_color_fix(clip, ref, wavelets=4, planes=None, backend="ncnn", num_st
     """Fixes color shift based on a reference clip. Works similarly to `average()`, but more accurate when color differences are large, at the cost of more computation.
 
     Args:
-        clip: Clip where the color fix will be applied to.
+        clip: Clip where the color fix will be applied to. Any format on CPU, must be float format on GPU.
         ref: Reference clip where the colors are taken from. Should match the base clip somewhat. Compression, grain, or lower resolution are all okay.
         wavelets: Number of wavelets, around 4 seems to work best in most cases. Higher means a more global color match and wider bloom/bleed. Lower means a more 
             local color match and smaller bloom/bleed. Lower is also faster. Too low and the reference clip will become visible. Test values 3 and 8 and this will become more clear.
