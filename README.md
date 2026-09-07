@@ -231,7 +231,7 @@ Benchmarks were done on a RTX 4090 GPU and a Ryzen 5900X CPU with 16-bit input c
 <table>
   <thead>
     <tr align="center">
-      <th colspan="3">Average Color Fix</th>
+      <th colspan="3">Average Color Fix (CPU)</th>
     </tr>
     <tr align="center">
       <th>Resolution</th>
