@@ -14,23 +14,24 @@ core = vs.core
 
 
 def expression(clips, expr, format=None):
-    # optional plugin for slight speed boost
-    if hasattr(core, "akarin"):
+    # optional plugin for cpu speed boost
+    clip = clips if isinstance(clips, vs.VideoNode) else clips[0]
+    if hasattr(core, "akarin") and (vs.__version__.release_major < 80 or not clip.gpu_resident):
         return core.akarin.Expr(clips, expr, format=format)
     else:
         return core.std.Expr(clips, expr, format=format)
 
 
 def box_blur(clip, planes=None, hradius=1, hpasses=1, vradius=1, vpasses=1):
-    # optional plugin for slight speed boost
-    if hasattr(core, "vszip"):
+    # optional plugin for cpu speed boost
+    if hasattr(core, "vszip") and (vs.__version__.release_major < 80 or not clip.gpu_resident):
         return core.vszip.BoxBlur(clip, planes=planes, hradius=hradius, hpasses=hpasses, vradius=vradius, vpasses=vpasses)
     else:
         return core.std.BoxBlur(clip, planes=planes, hradius=hradius, hpasses=hpasses, vradius=vradius, vpasses=vpasses)
 
 
 def make_diff(clipa, clipb, planes=None):
-    # makes makediff work on 16-bit float
+    # makes makediff work on 16-bit float before vapoursynth r78
     if clipa.format.sample_type == vs.FLOAT and clipa.format.bits_per_sample == 16 and vs.__version__.release_major < 78:
         return expression([clipa, clipb], expr=["x y -" if i in planes else "" for i in range(clipa.format.num_planes)])
     else:
@@ -38,7 +39,7 @@ def make_diff(clipa, clipb, planes=None):
 
 
 def merge_diff(clipa, clipb, planes=None):
-    # makes mergediff work on 16-bit float
+    # makes mergediff work on 16-bit float before vapoursynth r78
     if clipa.format.sample_type == vs.FLOAT and clipa.format.bits_per_sample == 16 and vs.__version__.release_major < 78:
         return expression([clipa, clipb], expr=["x y +" if i in planes else "" for i in range(clipa.format.num_planes)])
     else:
