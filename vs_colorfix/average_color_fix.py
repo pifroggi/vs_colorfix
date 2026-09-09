@@ -12,7 +12,7 @@ core = vs.core
 
 
 def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
-    """Fixes color shift based on a reference clip. A very fast way to transfer the colors from one clip to another. For large color differences, `wavelet()` is more accurate.
+    """Fixes color shift by matching the average color of a clip to a reference clip. A very fast way to transfer colors from one clip to another.
 
     Args:
         clip: Clip where the color fix will be applied to.
@@ -21,7 +21,7 @@ def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
             Too low and the reference clip will become visible. Test values 5 and 30 and this will become more clear.
         planes: Which planes to color fix. Any unmentioned planes will simply be copied. None means all planes will be color fixed.
         fast: Does the averaging via a downscale instead of a blur, which is much faster, but will produce faint blocky artifacts. 
-            I found it useful for radius > 60 where artifacts are often no longer noticable, or to fix something like a prefilter clip.
+            Useful for very large radii where artifacts are no longer noticeable, or to fix something like a prefilter clip.
     """
     
     if not isinstance(clip, vs.VideoNode):
@@ -34,6 +34,8 @@ def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
         raise TypeError("vs_colorfix.average: Ref must have constant format and dimensions.")
     if clip.format.sample_type == vs.FLOAT and clip.format.bits_per_sample == 16 and vs.__version__.release_major < 78 and not hasattr(core, "vszip"):
         raise ValueError("vs_colorfix.average: 16-bit float formats require vapoursynth version 78 or newer, or the plugin 'vszip' version 15.0.0 or newer.")
+    if vs.__version__.release_major >= 80 and clip.gpu_resident != ref.gpu_resident:
+        raise ValueError("vs_colorfix.average: Clip and ref must be on the same device. CPU and GPU clips can not be mixed.")
     if clip.format.id != ref.format.id:
         raise ValueError("vs_colorfix.average: Clip and ref must have the same format. 16-bit input is recommended to avoid banding.")
     if not isinstance(fast, bool):
