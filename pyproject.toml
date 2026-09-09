@@ -33,6 +33,7 @@ classifiers = [
 
 dependencies = [
 	"vapoursynth>=74",
+	"vapoursynth-atwt",
 	"vapoursynth-vszip",
 	"vapoursynth-mlrt-ov",
 	"vapoursynth-mlrt-ncnn",
