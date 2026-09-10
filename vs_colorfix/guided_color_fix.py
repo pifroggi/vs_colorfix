@@ -81,6 +81,8 @@ def guided_color_fix(clip, ref, planes=None, backend="tensorrt", num_streams=1, 
         raise TypeError("vs_colorfix.guided: Clip must have constant format and dimensions.")
     if ref.format.id == vs.PresetVideoFormat.NONE or ref.width == 0 or ref.height == 0:
         raise TypeError("vs_colorfix.guided: Ref must have constant format and dimensions.")
+    if vs.__version__.release_major >= 80 and (clip.gpu_resident or ref.gpu_resident):
+        raise ValueError("vs_colorfix.guided: GPU based input clips are not supported yet. Please transfer both input clips to CPU first.")
     if clip.format.sample_type != vs.FLOAT:
         raise ValueError("vs_colorfix.guided: Input clips must be in float format.")
     if clip.format.id != ref.format.id:
