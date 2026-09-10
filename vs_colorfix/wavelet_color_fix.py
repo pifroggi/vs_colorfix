@@ -118,7 +118,7 @@ def _wavelet_color_fix_atwt(clip, ref, wavelets, planes):
 
 
 def wavelet_color_fix(clip, ref, wavelets=4, planes=None, backend="ncnn", num_streams=2, gpu_id=0, engine_folder=None):
-    """Fixes color shift based on a reference clip. Works similarly to `average()`, but more accurate when color differences are large, at the cost of more computation.
+    """Fixes color shift by converting into wavelets, then matching the average color of a clip to a reference clip. Works similarly to `average()`, but more accurate for larger color differences, at the cost of more computation.
 
     Args:
         clip: Clip where the color fix will be applied to. Any format on CPU, must be float format on GPU.
@@ -145,6 +145,8 @@ def wavelet_color_fix(clip, ref, wavelets=4, planes=None, backend="ncnn", num_st
         raise TypeError("vs_colorfix.wavelet: Clip must have constant format and dimensions.")
     if ref.format.id == vs.PresetVideoFormat.NONE or ref.width == 0 or ref.height == 0:
         raise TypeError("vs_colorfix.wavelet: Ref must have constant format and dimensions.")
+    if vs.__version__.release_major >= 80 and (clip.gpu_resident or ref.gpu_resident):
+        raise ValueError("vs_colorfix.wavelet: GPU based input clips are not supported yet. Please transfer both input clips to CPU first.")
     if clip.format.id != ref.format.id:
         raise ValueError("vs_colorfix.wavelet: Clip and ref must have the same format.")
     if clip.num_frames != ref.num_frames:
