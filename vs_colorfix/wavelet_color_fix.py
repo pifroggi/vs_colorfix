@@ -55,7 +55,7 @@ def _wavelet_color_fix_vsmlrt(clip, ref, wavelets, planes, backend="ncnn", num_s
     # gpu backends using vsmlrt
     
     if clip.format.sample_type != vs.FLOAT:
-        raise ValueError("vs_colorfix.wavelet: Input clips must be in float format when using a GPU backend. Use 16-bit float for best performance, if supported by your GPU. Most modern GPUs do.")
+        raise ValueError("vs_colorfix.wavelet: Input clips must be in float format when using a GPU backend.")
     
     clip_format    = clip.format
     num_planes     = clip.format.num_planes
