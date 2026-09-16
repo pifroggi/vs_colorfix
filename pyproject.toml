@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vs_colorfix"
-version = "2.2.0"
+version = "2.3.0"
 description = "Color Fix, Color Transfer, or Color Match for VapourSynth."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -51,3 +51,4 @@ tensorrt = [
 Homepage = "https://github.com/pifroggi/vs_colorfix"
 Repository = "https://github.com/pifroggi/vs_colorfix"
 Issues = "https://github.com/pifroggi/vs_colorfix/issues"
+Changelog = "https://github.com/pifroggi/vs_colorfix/releases"
