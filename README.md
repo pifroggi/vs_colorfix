@@ -94,7 +94,7 @@ Which planes to color fix. Any unmentioned planes will simply be copied.
 If not set, all planes will be color-fixed.
 
 __*`backend`* (optional)__  
-The used backend. **16-bit float input is always much faster on GPU, but not supported by older GPUs.**
+The backend used to run the model:
 * `cpu` CPU mode *(slow)*.
 * `ncnn` GPU mode using NCNN. Works on almost any GPU, even Mac *(fast)*.
 * `directml` GPU mode using DirectML. Works on most GPUs, Windows only *(fast)*.
@@ -135,7 +135,7 @@ Which planes to color fix. Any unmentioned planes will simply be copied.
 If not set, all planes will be color-fixed.
 
 __*`backend`* (optional)__  
-The used backend.
+The backend used to run the model:
 * `cpu` CPU mode *(very slow)*.
 * `ncnn` GPU mode using NCNN. Works on almost any GPU, even Mac *(fast)*.
 * `directml` GPU mode using DirectML. Works on most GPUs, Windows only *(faster)*.
