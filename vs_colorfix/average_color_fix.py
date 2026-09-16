@@ -11,7 +11,7 @@ from .utils import box_blur, make_diff, merge_diff
 core = vs.core
 
 
-def average_color_fix(clip, ref, radius=10, planes=None, fast=False):
+def average_color_fix(clip: vs.VideoNode, ref: vs.VideoNode, radius: int = 10, planes: list[int] | int | None = None, fast: bool = False) -> vs.VideoNode:
     """Fixes color shift by matching the average color of a clip to a reference clip. A very fast way to transfer colors from one clip to another.
 
     Args:
