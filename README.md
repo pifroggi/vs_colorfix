@@ -16,12 +16,11 @@ For example for fixing color shift from AI upscaling/restoration models, or tran
 ```
 pip install -U vs_colorfix[tensorrt] --extra-index-url https://pypi.nvidia.com/
 ```
-To enable the Wavelet Color Fix CPU backend, install the [ATWT](https://github.com/yuygfgg/Vapoursynth-ATWT) plugin. *(optional)*  
+
 ### Others
 ```
 pip install -U vs_colorfix
 ```
-To enable the Wavelet Color Fix CPU backend, install the [ATWT](https://github.com/yuygfgg/Vapoursynth-ATWT) plugin. *(optional)*  
 
 <br />
 
@@ -76,7 +75,7 @@ clip = vs_colorfix.wavelet(clip, ref, wavelets=4, planes=[0, 1, 2], backend="ncn
 ```
 
 __*`clip`*__  
-Base clip where the colors will be applied to. Any format on CPU, must be float format on GPU.  
+Base clip where the colors will be applied to. Can be any format on CPU, must be float format on GPU. 
 Recommended higher than 8-bit to avoid banding.
 
 __*`ref`*__  
