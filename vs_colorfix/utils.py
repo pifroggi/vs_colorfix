@@ -267,10 +267,10 @@ def get_engine(onnx_path, engine_dir, engine_w, engine_h, num_planes, precision,
         return engine_path
     
     # get plugin info
-    plugin_path = os.path.dirname(info["path"].decode(errors="ignore"))
-    trt_version = int(info["tensorrt_version"].decode(errors="ignore"))
+    plugin_path = os.path.dirname(os.fsdecode(info["path"]))
+    trt_version = int(os.fsdecode(info["tensorrt_version"]))
     trt_version = [trt_version // 10000, (trt_version % 10000) // 100, trt_version % 100]
-    cuda_major  = int(info["cuda_runtime_version"].decode(errors="ignore")) // 1000
+    cuda_major  = int(os.fsdecode(info["cuda_runtime_version"])) // 1000
     
     # build new engine
     logging.warning(f"vs_colorfix{func_name}: Building new TensorRT engine for width=%d, height=%d and precision=fp%d. This may take a few minutes.", engine_w, engine_h, precision)    
